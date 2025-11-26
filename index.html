@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Darling Chatbot</title>
+</head>
+<body>
+  <h1>Chat with Darling</h1>
+
+  <div id="chat-box" style="border:1px solid #ccc; padding:10px; width:400px; height:300px; overflow:auto;">
+  </div>
+
+  <br>
+
+  <input id="msg" type="text" placeholder="Type your message..." style="width:300px;">
+  <button onclick="sendMsg()">Send</button>
+
+<script>
+async function sendMsg(){
+    let message = document.getElementById("msg").value;
+    document.getElementById("msg").value = "";
+
+    let box = document.getElementById("chat-box");
+    box.innerHTML += "<p><b>You:</b> " + message + "</p>";
+
+    let res = await fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message})
+    });
+
+    let data = await res.json();
+    let reply = data.reply;
+
+    box.innerHTML += "<p><b>Darling:</b> " + reply + "</p>";
+    box.scrollTop = box.scrollHeight;
+}
+</script>
+
+</body>
+</html>
