@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DoubtAI — Student Chat (Fixed Math, Zero-cost Wiki)</title>
+
+<style>
+  :root{
+    --bg:#031517; --panel:#06191d; --muted:#9fb6bf; --accent:#6ad1ff;
+    --left:#04242b; --right:#06383f; --radius:18px;
+  }
+  *{box-sizing:border-box;font-family:Inter,Segoe UI,Roboto,Arial,system-ui}
+  body{margin:0;background:linear-gradient(180deg,var(--bg),#021214);color:#e8fbff}
+  .app{max-width:980px;margin:18px auto;padding:18px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#0bb7e8,#6ad1ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#012;font-size:22px}
+  h1{margin:0;font-size:20px}
+  .sub{color:var(--muted);font-size:13px}
+  .controls{display:flex;gap:8px;align-items:center}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:10px;color:var(--muted);cursor:pointer}
+  .tools{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .tool-btn{background:linear-gradient(90deg,#072c36,#0b2630);border:1px solid rgba(106,209,255,0.06);color:#bff0ff;padding:8px 10px;border-radius:10px;cursor:pointer}
+  .main{display:flex;gap:16px;margin-top:12px}
+  .chat{flex:1;display:flex;flex-direction:column}
+  .chat-window{background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.006));border-radius:12px;padding:14px;height:560px;overflow:auto;border:1px solid rgba(255,255,255,0.02)}
+  .messages{display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:78%;padding:12px 16px;border-radius:var(--radius);line-height:1.35;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+  .msg.bot{align-self:flex-start;background:linear-gradient(180deg,var(--left),#012426);color:#dbfbff;border-bottom-left-radius:8px}
+  .msg.user{align-self:flex-end;background:linear-gradient(180deg,var(--right),#033b3f);color:#eaffff;border-bottom-right-radius:8px}
+  .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .footer{display:flex;gap:8px;align-items:center;margin-top:12px}
+  .input{flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:#071417;color:#eaffff}
+  .personality{display:flex;gap:8px;align-items:center}
+  .personality label{cursor:pointer;padding:6px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);color:var(--muted);font-size:13px}
+  .activeP{background:linear-gradient(90deg,#133c4b,#0c2f36);color:#bff0ff;border:1px solid rgba(106,209,255,0.15)}
+  .right{width:320px}
+  .card{background:linear-gradient(180deg,#04171a,#05181b);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);color:var(--muted)}
+  .list{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+  .small{font-size:13px;color:var(--muted)}
+  footer.small{text-align:center;margin-top:14px}
+  @media(max-width:940px){.main{flex-direction:column}.right{width:100%}.chat-window{height:420px}}
+</style>
+</head>
+
+<body>
+<div class="app" role="application" aria-label="DoubtAI">
+
+  <div class="top">
+    <div class="brand">
+      <div class="logo">D</div>
+      <div>
+        <h1>DoubtAI — Student Chat</h1>
+        <div class="sub">Dark • Bubble • Voice + Text • Wiki lookup (free)</div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="small">Voice Reply</div>
+      <button id="toggleSpeak" class="btn">ON</button>
+    </div>
+  </div>
+
+  <div class="tools">
+    <button id="jokeBtn" class="tool-btn">Tell a joke</button>
+    <button id="poemBtn" class="tool-btn">Short poem</button>
+    <button id="summBtn" class="tool-btn">Summarize</button>
+    <button id="flashBtn" class="tool-btn">Add flashcards</button>
+  </div>
+
+  <div class="main">
+    <div class="chat">
+      <div class="chat-window" id="chatWindow">
+        <div class="messages" id="messages">
+          <div class="meta">DoubtAI ready — ask your doubts freely ✨</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button id="micBtn" class="btn">🎤</button>
+        <input id="input" class="input" placeholder="Ask your doubt here...">
+        <button id="sendBtn" class="btn">Send</button>
+
+        <div class="personality" id="personalityBar">
+          <label data-p="lovely" class="activeP">Lovely</label>
+          <label data-p="teacher">Teacher</label>
+          <label data-p="funny">Funny</label>
+          <label data-p="caring">Caring</label>
+          <label data-p="auto">Auto</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <strong>Quick Tools</strong>
+        <div class="small">Student friendly</div>
+        <div id="flashList"></div>
+        <button id="addFlashBtn" class="btn">Add</button>
+        <button id="clearFlashBtn" class="btn">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="small">
+    DoubtAI — Your friendly doubt-solving assistant 💡
+  </footer>
+
+</div>
+
+<script>
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+
+function addMessage(text, who='bot'){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (who==='user'?'user':'bot');
+  div.innerHTML = `<strong>${who==='user'?'You':'DoubtAI'}:</strong> ${text}`;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function processUser(text){
+  if(!text) return;
+  addMessage(text,'user');
+  setTimeout(()=>{
+    addMessage("I'm DoubtAI 🤖 — tell me your doubt, I’ll help you clearly!");
+  },400);
+}
+
+sendBtn.onclick=()=>{processUser(inputEl.value);inputEl.value='';};
+inputEl.onkeydown=e=>{if(e.key==='Enter'){processUser(inputEl.value);inputEl.value='';}};
+</script>
+
+</body>
+</html>
