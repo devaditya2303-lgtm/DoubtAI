@@ -1,8 +1,7 @@
-# 🤖 DoubtAI
+# 🤖 MythBOT
 
-DoubtAI is a **zero-cost, student-friendly chatbot** designed to help learners
-solve **math problems**, understand **science concepts**, and clear their
-academic doubts quickly — all **without any API key**.
+MythBOT is your digital pandit—calm, accurate, always available.
+From Brahma to Kalki, from Samudra Manthan to Kurukshetra, this bot delivers contextual gyaan with zero noise.
 
 ---
 
@@ -17,40 +16,3 @@ academic doubts quickly — all **without any API key**.
 - 🚫 **No API key required**
 - 💯 Works on **GitHub Pages**
 
----
-
-## 🛠️ Tech Stack
-
-- **HTML5**
-- **CSS3**
-- **Vanilla JavaScript**
-- **Wikipedia REST API (free)**
-
----
-
-## 🚀 How to Run
-
-### Option 1: Run Locally
-1. Download or clone this repository
-2. Open `index.html` in any modern browser (Chrome / Edge)
-3. Start asking doubts 🎉
-
-### Option 2: GitHub Pages
-1. Push the project to GitHub
-2. Go to **Settings → Pages**
-3. Select **Branch: main** and **/root**
-4. Open the generated link
-
----
-
-## 🧪 Example Queries
-
-- `2 + 3 × 4`
-- `What is photosynthesis`
-- `Define gravity`
-- `Tell me a joke`
-- `Explain cell structure`
-
----
-
-## 📁 Project Structure
